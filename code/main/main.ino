@@ -40,19 +40,12 @@ int gtquay1 = 0;
 // Biến thời gian
 unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
-unsigned long currentMillis1 = 0;
-unsigned long previousMillis1 = 0;
-unsigned long timeDelay1;
 
 void setup() {
   Serial.begin(9600);
   pinMode(Start, INPUT_PULLUP);      // start
   pinMode(Reset, INPUT_PULLUP);      // reset
 
-  //Phím test cảm biến
-//  pinMode(pinR, INPUT_PULLUP);      // màu đỏ
-//  pinMode(pinG, INPUT_PULLUP);      // màu xanh
-//  pinMode(pinY, INPUT_PULLUP);      // màu vàng
 
   // Cấu hình chân Servo
   servo1.attach(servo1pin);
@@ -95,14 +88,12 @@ void loop() {
 //------------------------------------------------------
 // Servo 1 hoạt động
 void chuKiHD(){
-  unsigned long currentMillis1 = millis();
+  unsigned long currentMillis = millis();
   ReadCB();
   //LCDColor();
-  if(currentMillis1 - previousMillis1 >= 7000){
-    previousMillis1 = currentMillis1;
-    //ReadCB();
+  if(currentMillis - previousMillis >= 5000){
+    previousMillis = currentMillis;
     servo1.write(gtquay1);
-    //ReadCB();
     hienThi();
     //LCDColor();
     gtquay1 = gtquay1 - 90;
@@ -119,7 +110,7 @@ void chuKiHD(){
 // Đọc cảm biến
 void ReadCB(){
   readColor();
-  if(color == 1){       // Đếm và phân loại màu vàng
+  if(color == 1 && khoaDem2 == 0 && khoaDem3 == 0){       // Đếm và phân loại màu vàng
     servo2.write(45);
     if(khoaDem1 == 0){
       sp1++;
@@ -127,7 +118,7 @@ void ReadCB(){
     }
     //Serial.println("vang");
   }
-  if(color == 3){       // Đếm và phân loại màu xanh
+  if(color == 3 && khoaDem1 == 0 && khoaDem2 == 0){       // Đếm và phân loại màu xanh
     servo2.write(90);
     if(khoaDem2 == 0){
       sp2++;
@@ -135,7 +126,7 @@ void ReadCB(){
     }
     //Serial.println("xanh");
   }
-  if(color == 2){       // Đếm và phân loại màu pink
+  if(color == 2 && khoaDem1 == 0 && khoaDem3 == 0){       // Đếm và phân loại màu pink
     servo2.write(135);
     if(khoaDem3 == 0){
       sp3++;
